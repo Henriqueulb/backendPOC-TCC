@@ -1,39 +1,52 @@
-# backend-medico
+faça o clone do frontend para o android studio e o clone do back para sua IDE( eu utilizei Intellij, mas pode ser vsCode)
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+Passo a Passo para Execução
+1. Configurar o Banco de Dados (PostgreSQL)
+O backend espera uma conexão com um banco PostgreSQL rodando na porta 5432. A maneira mais rápida de subir o banco é via Docker.
 
-Here are some useful links to get you started:
+Execute o seguinte comando no terminal para criar o container com as credenciais esperadas pelo código (user: postgres, password: admin):
+docker run --name postgres-tcc -e POSTGRES_PASSWORD=admin -p 5432:5432 -d postgres
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+2. Rodar o Backend
+Navegue até a pasta do backend:
+cd henriqueulb/backendpoc-tcc/backendPOC-TCC-4edb4319759f7281a6f0eb202ae56ec551823050
 
-## Features
+Execute o servidor via Gradle:
+gradlew.bat run
 
-Here's a list of features included in this project:
+Aguarde a mensagem: Responding at http://0.0.0.0:8080.
 
-| Name                                               | Description                                                 |
-| ----------------------------------------------------|------------------------------------------------------------- |
-| [Routing](https://start.ktor.io/p/routing-default) | Allows to define structured routes and associated handlers. |
+O servidor estará rodando em localhost:8080.
 
-## Building & Running
+3. Rodar o Aplicativo Mobile
+Abra o Android Studio.
 
-To build or run the project, use one of the following tasks:
+Selecione Open e navegue até a pasta do projeto mobile: henriqueulb/healthcarepoc-tcc/HealthCarePOC-TCC-9808031d1027845da6c4f4270c9d1fc5010852fd
 
-| Task                                    | Description                                                          |
-| -----------------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`                        | Run the tests                                                        |
-| `./gradlew build`                       | Build everything                                                     |
-| `./gradlew buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `./gradlew buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `./gradlew publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `./gradlew run`                         | Run the server                                                       |
-| `./gradlew runDocker`                   | Run using the local docker image                                     |
+Aguarde a sincronização do Gradle.
 
-If the server starts successfully, you'll see the following output:
+Crie um Emulador Android (AVD) ou conecte um dispositivo físico.
 
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
+Clique no botão Run (Play)
 
+-----------------//--------------
+
+Importante sobre Conexão (IP)
+O aplicativo está configurado para rodar no Emulador Android por padrão.
+
+No arquivo RetrofitClient.kt, a BASE_URL está definida como http://10.0.2.2:8080/.
+
+O IP 10.0.2.2 é um endereço especial usado pelo emulador do Android para acessar o localhost da máquina do computador.
+
+Se você for rodar em um celular físico:
+
+Certifique-se de que o celular e o computador estão na mesma rede Wi-Fi.
+
+Descubra o IP local do seu computador (ex: 192.168.0.15).
+
+Altere o arquivo RetrofitClient.kt:
+
+// De:
+private const val BASE_URL = "http://10.0.2.2:8080/"
+// Para:
+private const val BASE_URL = "http://192.168.0.15:8080/"
